@@ -7,10 +7,10 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class UserDAO {
-    public User login(String username, String password) {
+    public User getUser(String email, String password) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.createQuery("FROM User WHERE userName = :userName and password = :password", User.class)
-                    .setParameter("userName", username)
+            return session.createQuery("FROM User WHERE email = :email and password = :password", User.class)
+                    .setParameter("email", email)
                     .setParameter("password", password)
                     .uniqueResult();
         }

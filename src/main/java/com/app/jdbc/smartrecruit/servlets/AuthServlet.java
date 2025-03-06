@@ -12,6 +12,10 @@ import jakarta.servlet.http.HttpSession;
 import org.hibernate.Session;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @WebServlet("/auth/*")
 public class AuthServlet extends HttpServlet {
     @Override
@@ -23,9 +27,16 @@ public class AuthServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getPathInfo();
         switch (action) {
+            case "/login-form":
+                loginForm(req, resp);
+                break;
+
+            case "/register-form":
+                registerForm(req, resp);
+                break;
+
             case "/login":
-//                login(req, resp);
-                System.out.println("hello");
+                login(req, resp);
                 break;
 
             case "/logout":
@@ -38,15 +49,39 @@ public class AuthServlet extends HttpServlet {
         }
     }
 
+    private void loginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
+    }
+
+    private void registerForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/auth/register.jsp").forward(req, resp);
+    }
+
     private void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
+        String username = req.getParameter("username");
+        String fname = req.getParameter("fname");
+        String lname = req.getParameter("lname");
+        String birthday = req.getParameter("bdate");
 
-        //
+        System.out.println("email: " + email);
+        System.out.println("password: " + password);
+        System.out.println("username: " + username);
+        System.out.println("fname: " + fname);
+        System.out.println("lname: " + lname);
+        System.out.println("birthday: " + birthday);
+
+
         UserDAO userDAO = new UserDAO();
         User user = new Admin();
+        user.setName(lname + " " + fname);
+        user.setEmail(email);
         user.setPassword(password);
-        user.setUserName(email);
+        user.setUpdatedAt(LocalTime.now());
+        user.setCreatedAt(LocalDate.now());
+        user.setBirthdate(LocalDate.parse(birthday));
+
 
         userDAO.saveUser(user);
 
@@ -54,18 +89,23 @@ public class AuthServlet extends HttpServlet {
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-        String username = req.getParameter("username");
+        String email = req.getParameter("email");
         String password = req.getParameter("password");
+        System.out.println("Admin noo");
 
         HttpSession session = req.getSession();
 
         try {
             UserDAO userDAO = new UserDAO();
-            User user = userDAO.login(username, password);
+            User user = userDAO.getUser(email, password);
             session.setAttribute("user", user);
 
+
             if(user instanceof Admin) {
-                System.out.println("admin");
+                System.out.println("Admin logged in");
+                resp.setContentType("text/html");
+                PrintWriter out = resp.getWriter();
+                out.println("<html><body><h1>Hello, Admin!</h1></body></html>");
             }
 
         }catch (Exception e) {

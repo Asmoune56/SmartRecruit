@@ -1,30 +1,23 @@
 package com.app.jdbc.smartrecruit.models;
 
 
-import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+
+import java.sql.Date;
 
 @Entity
 @DiscriminatorValue("ADMIN")
 public class Admin extends User {
-    private String name;
-    private java.sql.Date birthDate;
+    private java.sql.Date birthdate;
 
-    public String getName() {
-        return name;
-    }
+//    public Admin(java.sql.Date birthdate){
+//        super();
+//        this.birthdate = birthdate;
+//
+//    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public java.sql.Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(java.sql.Date birthDate) {
-        this.birthDate = birthDate;
+    public void setBirthdate(Date birthdate) {
+        this.birthdate = birthdate;
     }
 }
