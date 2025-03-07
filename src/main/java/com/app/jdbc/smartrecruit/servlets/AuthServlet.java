@@ -9,10 +9,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.hibernate.Session;
+
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -91,7 +90,6 @@ public class AuthServlet extends HttpServlet {
 
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        System.out.println("Admin noo");
 
         HttpSession session = req.getSession();
 
@@ -102,10 +100,7 @@ public class AuthServlet extends HttpServlet {
 
 
             if(user instanceof Admin) {
-                System.out.println("Admin logged in");
-                resp.setContentType("text/html");
-                PrintWriter out = resp.getWriter();
-                out.println("<html><body><h1>Hello, Admin!</h1></body></html>");
+                resp.sendRedirect("/admin/dashboard");
             }
 
         }catch (Exception e) {
@@ -114,32 +109,11 @@ public class AuthServlet extends HttpServlet {
             session.setAttribute("messageType", "danger");
         }
 
-//        if (user != null) {
-//            HttpSession session = req.getSession();
-//            session.setAttribute("user", user);
-//
-//            switch (user) {
-//                case user instanceof Admin:
-//                    resp.sendRedirect("adminDashboard.jsp");
-//                    break;
-//                case "recruiter":
-//                    resp.sendRedirect("recruiterDashboard.jsp");
-//                    break;
-//                case "employer":
-//                    resp.sendRedirect("employerDashboard.jsp");
-//                    break;
-//                default:
-//                    resp.sendRedirect("login.jsp?error=invalid_role");
-//            }
-//        } else {
-//            resp.sendRedirect("login.jsp?error=invalid_credentials");
-//        }
-
     }
 
     private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.invalidate();
-        resp.sendRedirect("/smartrecruit");
+        resp.sendRedirect("/auth/login-form");
     }
 }
