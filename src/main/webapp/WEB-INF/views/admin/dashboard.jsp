@@ -66,7 +66,7 @@
                     </div>
 
             </div>
-        <%@ include file="../components/emplyee_table.jsp"%>
+        <%@ include file="../components/users_table.jsp"%>
 
         </div>
 

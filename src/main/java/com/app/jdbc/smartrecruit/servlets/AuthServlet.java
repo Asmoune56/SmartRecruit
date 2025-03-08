@@ -2,6 +2,8 @@ package com.app.jdbc.smartrecruit.servlets;
 
 import com.app.jdbc.smartrecruit.daos.UserDAO;
 import com.app.jdbc.smartrecruit.models.Admin;
+import com.app.jdbc.smartrecruit.models.Employee;
+import com.app.jdbc.smartrecruit.models.Recruiter;
 import com.app.jdbc.smartrecruit.models.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -45,6 +47,15 @@ public class AuthServlet extends HttpServlet {
             case "/register":
                 register(req, resp);
                 break;
+
+            case "/edit":
+                edit(req, resp);
+                break;
+
+            case "/delete":
+                delete(req, resp);
+                break;
+
         }
     }
 
@@ -59,30 +70,38 @@ public class AuthServlet extends HttpServlet {
     private void register(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         String password = req.getParameter("password");
-        String username = req.getParameter("username");
         String fname = req.getParameter("fname");
         String lname = req.getParameter("lname");
         String birthday = req.getParameter("bdate");
+        String company = req.getParameter("companyName");
 
-        System.out.println("email: " + email);
-        System.out.println("password: " + password);
-        System.out.println("username: " + username);
-        System.out.println("fname: " + fname);
-        System.out.println("lname: " + lname);
-        System.out.println("birthday: " + birthday);
+        String utype = req.getParameter("utype");
+        String redirect = req.getParameter("redirect");
 
 
-        UserDAO userDAO = new UserDAO();
-        User user = new Admin();
-        user.setName(lname + " " + fname);
+
+        UserDAO userDAO =  new UserDAO();
+        User user = utype.equals("employee") ? new Employee() : new Recruiter();
+        user.setFirstName(fname);
+        user.setLastName(lname);
         user.setEmail(email);
         user.setPassword(password);
         user.setUpdatedAt(LocalTime.now());
         user.setCreatedAt(LocalDate.now());
         user.setBirthdate(LocalDate.parse(birthday));
 
+        if(user instanceof Recruiter){
+            ((Recruiter) user).setCompanyName(company);
+        }
+
+        if(user instanceof Employee){
+            ((Employee) user).setFirstName(company);
+        }
+
+
 
         userDAO.saveUser(user);
+        resp.sendRedirect(redirect);
 
     }
 
@@ -103,6 +122,10 @@ public class AuthServlet extends HttpServlet {
                 resp.sendRedirect("/admin/dashboard");
             }
 
+            if(user instanceof Recruiter) {
+                resp.sendRedirect("/recruiter/dashboard");
+            }
+
         }catch (Exception e) {
             System.out.println("Password or username is wrong");
             session.setAttribute("message", "Password or username is wrong");
@@ -115,5 +138,49 @@ public class AuthServlet extends HttpServlet {
         HttpSession session = req.getSession();
         session.invalidate();
         resp.sendRedirect("/auth/login-form");
+    }
+
+    private void edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
+        String fname = req.getParameter("fname");
+        String lname = req.getParameter("lname");
+        String birthday = req.getParameter("bdate");
+        String company = req.getParameter("companyName");
+        String redirect = req.getParameter("redirect");
+
+        try {
+            UserDAO userDAO =  new UserDAO();
+            User user = userDAO.getUser(email, password);
+            user.setFirstName(fname);
+            user.setLastName(lname);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.setUpdatedAt(LocalTime.now());
+            user.setBirthdate(LocalDate.parse(birthday));
+            if(user instanceof Recruiter){
+                ((Recruiter) user).setCompanyName(company);
+            }
+
+            userDAO.updateUser(user);
+            resp.sendRedirect(redirect);
+        }catch (Exception e){
+            System.out.println("Password or username is wrong");
+        }
+    }
+
+    private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        HttpSession session = req.getSession();
+        try {
+            UserDAO userDAO = new UserDAO();
+            userDAO.deleteUserById(id);
+            session.setAttribute("message", "User deleted successfully");
+            resp.sendRedirect("/admin/recruiters");
+        }catch (Exception e) {
+            System.out.println("Password or username is wrong");
+            resp.sendRedirect("/admin/recruiters");
+
+        }
     }
 }

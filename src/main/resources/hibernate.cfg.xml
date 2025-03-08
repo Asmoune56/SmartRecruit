@@ -23,6 +23,7 @@
     <!-- Annotated entity classes -->
     <mapping class="com.app.jdbc.smartrecruit.models.User"/>
     <mapping class="com.app.jdbc.smartrecruit.models.Admin"/>
+    <mapping class="com.app.jdbc.smartrecruit.models.Recruiter"/>
 
   </session-factory>
 </hibernate-configuration>
