@@ -70,8 +70,8 @@
                     </td>
                     <!-- Actions-->
                     <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                        <a href="/auth/delete?id=<c:out value="${user.userId}" />">Delete</a>
-                        <a class="ml-3" href="recruiter/edit-form?id=<c:out value="${user.userId}" />">Edit</a>
+                        <a href="/auth/delete?id=<c:out value="${user.userId}" />&redirect=<c:out value="${type}"/>s">Delete</a>
+                        <a class="ml-3" href="<c:out value="${type}"/>/edit-form?id=<c:out value="${user.userId}" />">Edit</a>
                     </td>
                 </tr>
             </c:forEach>
