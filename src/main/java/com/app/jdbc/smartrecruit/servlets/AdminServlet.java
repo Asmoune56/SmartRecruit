@@ -1,6 +1,7 @@
 package com.app.jdbc.smartrecruit.servlets;
 
 import com.app.jdbc.smartrecruit.daos.UserDAO;
+import com.app.jdbc.smartrecruit.models.Employee;
 import com.app.jdbc.smartrecruit.models.Recruiter;
 import com.app.jdbc.smartrecruit.models.User;
 import jakarta.servlet.ServletException;
@@ -28,6 +29,8 @@ public class AdminServlet extends HttpServlet {
                 case "/dashboard":
                     getDashboard(request, response);
                     break;
+
+                // Recruiters funcs
                 case "/recruiters":
                     getAllRecruiters(request, response);
                     break;
@@ -37,6 +40,18 @@ public class AdminServlet extends HttpServlet {
                 case "/recruiter/edit-form":
                     editRecruiterForm(request, response);
                     break;
+
+                // Employees funcs
+                case "/employees":
+                    getAllEmployees(request, response);
+                    break;
+                case "/employee/add-form":
+                    addEmployeeForm(request, response);
+                    break;
+                case "/employee/edit-form":
+                    editEmployeeForm(request, response);
+                    break;
+
                 default:
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -45,10 +60,12 @@ public class AdminServlet extends HttpServlet {
     private void getDashboard(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
     }
+    // recruiters funcs
     private void getAllRecruiters(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<User> recruiters;
         recruiters = userDAO.getAllRecruiters(Recruiter.class);
         req.setAttribute("users", recruiters);
+        req.setAttribute("type", "recruiter");
         req.getRequestDispatcher("/WEB-INF/views/admin/list_recruiters.jsp").forward(req, resp);
     }
     private void addRecruiterForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -69,18 +86,31 @@ public class AdminServlet extends HttpServlet {
         }
     }
 
-    // edit
-    // add recruiter
-    // delete recruiter
-    // edit recruiter
-    // list recruiter
-    // add employee
-    // delete employee
-    // edit employee
-    // list  employee
-    // add offer
-    // delete offer
-    // edit offer
-    // list  offer
+    // employee funcs
+    private void getAllEmployees(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        List<User> employees;
+        employees = userDAO.getAllRecruiters(Employee.class);
+        req.setAttribute("users", employees);
+        req.setAttribute("type", "employee");
+        req.getRequestDispatcher("/WEB-INF/views/admin/list_employees.jsp").forward(req, resp);
+    }
+    private void addEmployeeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("redirect", "/admin/employees");
+        req.setAttribute("type", "employee");
+        req.getRequestDispatcher("/WEB-INF/views/admin/employee.jsp").forward(req, resp);
+    }
+    private void editEmployeeForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        try {
+            User user = userDAO.getUserById(id);
+            req.setAttribute("user", user);
+            req.setAttribute("type", "employee");
+            req.setAttribute("redirect", "/admin/employees");
+            req.getRequestDispatcher("/WEB-INF/views/admin/employee.jsp").forward(req, resp);
+        }catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
 
 }

@@ -74,6 +74,7 @@ public class AuthServlet extends HttpServlet {
         String lname = req.getParameter("lname");
         String birthday = req.getParameter("bdate");
         String company = req.getParameter("companyName");
+        String domain = req.getParameter("domain");
 
         String utype = req.getParameter("utype");
         String redirect = req.getParameter("redirect");
@@ -95,7 +96,7 @@ public class AuthServlet extends HttpServlet {
         }
 
         if(user instanceof Employee){
-            ((Employee) user).setFirstName(company);
+            ((Employee) user).setDomain(domain);
         }
 
 
@@ -171,12 +172,13 @@ public class AuthServlet extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
+        String redirect = req.getParameter("redirect");
         HttpSession session = req.getSession();
         try {
             UserDAO userDAO = new UserDAO();
             userDAO.deleteUserById(id);
             session.setAttribute("message", "User deleted successfully");
-            resp.sendRedirect("/admin/recruiters");
+            resp.sendRedirect("/admin/"+redirect);
         }catch (Exception e) {
             System.out.println("Password or username is wrong");
             resp.sendRedirect("/admin/recruiters");
