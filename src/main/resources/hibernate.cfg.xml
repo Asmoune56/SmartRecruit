@@ -25,6 +25,7 @@
     <mapping class="com.app.jdbc.smartrecruit.models.Admin"/>
     <mapping class="com.app.jdbc.smartrecruit.models.Recruiter"/>
     <mapping class="com.app.jdbc.smartrecruit.models.Employee"/>
+    <mapping class="com.app.jdbc.smartrecruit.models.Offer"/>
 
   </session-factory>
 </hibernate-configuration>
