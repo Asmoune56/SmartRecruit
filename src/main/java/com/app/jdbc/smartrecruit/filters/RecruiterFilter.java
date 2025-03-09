@@ -11,10 +11,8 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-
-@WebFilter({"/admin/*"})
-public class AdminFilter implements Filter {
-
+@WebFilter({"/recruiter/*"})
+public class RecruiterFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -26,9 +24,9 @@ public class AdminFilter implements Filter {
         if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("/auth/login-form");
         } else if (session.getAttribute("user") instanceof Employee) {
-            response.sendRedirect("/employee/offers");
-        } else if (session.getAttribute("user") instanceof Recruiter) {
-            response.sendRedirect("/recruiter/dashboard");
+            response.sendRedirect("/employee/profile");
+        } else if (session.getAttribute("user") instanceof Admin) {
+            response.sendRedirect("/admin/dashboard");
         } else {
             filterChain.doFilter(request, response);
         }

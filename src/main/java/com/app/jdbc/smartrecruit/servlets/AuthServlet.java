@@ -126,6 +126,9 @@ public class AuthServlet extends HttpServlet {
             if(user instanceof Recruiter) {
                 resp.sendRedirect("/recruiter/dashboard");
             }
+            if(user instanceof Employee){
+                resp.sendRedirect("/employee/profile");
+            }
 
         }catch (Exception e) {
             System.out.println("Password or username is wrong");
