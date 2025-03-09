@@ -2,8 +2,10 @@ package com.app.jdbc.smartrecruit.models;
 
 import jakarta.persistence.*;
 
+import javax.management.relation.Role;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -21,6 +23,9 @@ public class User {
     private LocalDate birthdate;
     private LocalDate createdAt;
     private LocalTime updatedAt;
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Offer> offers;
+
 
     public User() {}
 
@@ -72,4 +77,11 @@ public class User {
     public void setCreatedAt(LocalDate createdAt) {
         this.createdAt = createdAt;
     }
+    public List<Offer> getOffers() {
+        return offers;
+    }
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
+    }
+
 }

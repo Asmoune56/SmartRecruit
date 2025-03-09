@@ -70,7 +70,7 @@ public class UserDAO {
         }
     }
 
-    public List<User> getAllRecruiters(Class<? extends User> role) {
+    public List<User> getUsersByRole(Class<? extends User> role) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.createQuery("FROM User u WHERE type(u) = :role ", User.class)
                     .setParameter("role", role)

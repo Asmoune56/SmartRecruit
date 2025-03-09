@@ -1,7 +1,9 @@
 package com.app.jdbc.smartrecruit.servlets;
 
+import com.app.jdbc.smartrecruit.daos.OfferDao;
 import com.app.jdbc.smartrecruit.daos.UserDAO;
 import com.app.jdbc.smartrecruit.models.Employee;
+import com.app.jdbc.smartrecruit.models.Offer;
 import com.app.jdbc.smartrecruit.models.Recruiter;
 import com.app.jdbc.smartrecruit.models.User;
 import jakarta.servlet.ServletException;
@@ -17,6 +19,7 @@ import java.util.List;
 @WebServlet("/admin/*")
 public class AdminServlet extends HttpServlet {
     UserDAO userDAO = new UserDAO();
+    OfferDao offerDAO = new OfferDao();
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doGet(req, resp);
@@ -52,6 +55,17 @@ public class AdminServlet extends HttpServlet {
                     editEmployeeForm(request, response);
                     break;
 
+                // Offers funcs
+                case "/offers":
+                    getAllOffers(request, response);
+                    break;
+                case "/offer/add-form":
+                    addOfferForm(request, response);
+                    break;
+                case "/offer/edit-form":
+                    editOfferForm(request, response);
+                    break;
+
                 default:
                     response.sendError(HttpServletResponse.SC_NOT_FOUND);
             }
@@ -63,7 +77,7 @@ public class AdminServlet extends HttpServlet {
     // recruiters funcs
     private void getAllRecruiters(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<User> recruiters;
-        recruiters = userDAO.getAllRecruiters(Recruiter.class);
+        recruiters = userDAO.getUsersByRole(Recruiter.class);
         req.setAttribute("users", recruiters);
         req.setAttribute("type", "recruiter");
         req.getRequestDispatcher("/WEB-INF/views/admin/list_recruiters.jsp").forward(req, resp);
@@ -89,7 +103,7 @@ public class AdminServlet extends HttpServlet {
     // employee funcs
     private void getAllEmployees(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<User> employees;
-        employees = userDAO.getAllRecruiters(Employee.class);
+        employees = userDAO.getUsersByRole(Employee.class);
         req.setAttribute("users", employees);
         req.setAttribute("type", "employee");
         req.getRequestDispatcher("/WEB-INF/views/admin/list_employees.jsp").forward(req, resp);
@@ -107,6 +121,29 @@ public class AdminServlet extends HttpServlet {
             req.setAttribute("type", "employee");
             req.setAttribute("redirect", "/admin/employees");
             req.getRequestDispatcher("/WEB-INF/views/admin/employee.jsp").forward(req, resp);
+        }catch (Exception e) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
+    }
+
+    // offers funcs
+    private void getAllOffers(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        List<Offer> offers;
+        offers = offerDAO.getAllOffers();
+        req.setAttribute("offers", offers);
+        req.getRequestDispatcher("/WEB-INF/views/admin/list_offers.jsp").forward(req, resp);
+    }
+    private void addOfferForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setAttribute("redirect", "/admin/offers");
+        req.getRequestDispatcher("/WEB-INF/views/admin/offer.jsp").forward(req, resp);
+    }
+    private void editOfferForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        try {
+            Offer offer = offerDAO.getOffer(id);
+            req.setAttribute("offer", offer);
+            req.setAttribute("redirect", "/admin/offers");
+            req.getRequestDispatcher("/WEB-INF/views/admin/offer.jsp").forward(req, resp);
         }catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
