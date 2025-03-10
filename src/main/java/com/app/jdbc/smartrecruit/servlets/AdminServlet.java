@@ -76,7 +76,18 @@ public class AdminServlet extends HttpServlet {
     }
 
     private void getDashboard(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
+        try {
+            long employeesCount = userDAO.getUserCountByRole(Employee.class);
+            long recruitersCount = userDAO.getUserCountByRole(Recruiter.class);
+            long offersCount = offerDAO.getOffersCount();
+
+            req.setAttribute("employeesCount", employeesCount);
+            req.setAttribute("recruitersCount", recruitersCount);
+            req.setAttribute("offersCount", offersCount);
+            req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
     // profile
     private void getProfile(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
