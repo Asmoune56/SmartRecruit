@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <h3 class="text-sm font-medium text-gray-500">Employees</h3>
-                    <p class="text-2xl font-semibold text-gray-900 mt-1">10</p>
+                    <p class="text-2xl font-semibold text-gray-900 mt-1"><c:out value="${requestScope.employeesCount}" /></p>
                 </div>
                 <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center justify-between mb-4">
@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <h3 class="text-sm font-medium text-gray-500">Recruiters</h3>
-                        <p class="text-2xl font-semibold text-gray-900 mt-1">10</p>
+                        <p class="text-2xl font-semibold text-gray-900 mt-1"><c:out value="${requestScope.recruitersCount}" /></p>
                     </div>
                 <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center justify-between mb-4">
@@ -52,7 +52,7 @@
 
                         </div>
                         <h3 class="text-sm font-medium text-gray-500">Offers</h3>
-                        <p class="text-2xl font-semibold text-gray-900 mt-1">10</p>
+                        <p class="text-2xl font-semibold text-gray-900 mt-1"><c:out value="${requestScope.offersCount}" /></p>
                     </div>
                 <div class="bg-white rounded-lg shadow p-6">
                         <div class="flex items-center justify-between mb-4">
