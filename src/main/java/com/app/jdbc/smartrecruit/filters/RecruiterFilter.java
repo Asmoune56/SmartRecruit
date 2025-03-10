@@ -2,7 +2,6 @@ package com.app.jdbc.smartrecruit.filters;
 
 import com.app.jdbc.smartrecruit.models.Admin;
 import com.app.jdbc.smartrecruit.models.Employee;
-import com.app.jdbc.smartrecruit.models.Recruiter;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;

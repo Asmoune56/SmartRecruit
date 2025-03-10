@@ -121,13 +121,19 @@ public class AuthServlet extends HttpServlet {
 
             if(user instanceof Admin) {
                 resp.sendRedirect("/admin/dashboard");
+                session.setAttribute("utype", "admin");
+
             }
 
             if(user instanceof Recruiter) {
                 resp.sendRedirect("/recruiter/dashboard");
+                session.setAttribute("utype", "recruiter");
+
             }
             if(user instanceof Employee){
                 resp.sendRedirect("/employee/profile");
+                session.setAttribute("utype", "employee");
+
             }
 
         }catch (Exception e) {

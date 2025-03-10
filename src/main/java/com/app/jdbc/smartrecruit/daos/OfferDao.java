@@ -47,9 +47,9 @@ public class OfferDao {
 
 
 
-    public List<Offer> getOffersByUserId(int userId) {
+    public List<Offer> getOffersByUserId(long userId) {
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
-           return session.createQuery("from Offer o where o.createdBy = :userId", Offer.class)
+           return session.createQuery("from Offer o where o.createdBy.userId = :userId", Offer.class)
                     .setParameter("userId", userId)
                     .getResultList();
         }
@@ -60,6 +60,20 @@ public class OfferDao {
             session.createQuery("delete from Offer o where o.id = :id", Offer.class)
                     .setParameter("id", id)
                     .executeUpdate();
+        }
+    }
+
+    public long getOffersCount() {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("select count(o) from Offer o", Long.class).getSingleResult();
+        }
+    }
+
+    public long getOffersCountByUserId(long userId) {
+        try(Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("select count(o) from Offer o where o.createdBy.userId = :userId", Long.class)
+                    .setParameter("userId", userId)
+                    .getSingleResult();
         }
     }
 
