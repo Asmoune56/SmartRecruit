@@ -16,14 +16,14 @@
 <%@ include file="../components/sidebar.jsp" %>
 <div class="ml-[300px] mr-[16px] my-[16px]">
     <h1 class="text-2xl font-bold text-gray-900 mb-6">
-        <c:if test="${user == null}" >
+        <c:if test="${sessionScope.user == null}" >
             Add Employee
         </c:if>
-        <c:if test="${user != null}" >
+        <c:if test="${sessionScope.user != null}" >
             Edit Employee
         </c:if>
     </h1>
-    <%@ include file="../components/form.jsp" %>
+    <%@ include file="../components/user_form.jsp" %>
 </div>
 </body>
 </html>

@@ -33,6 +33,10 @@ public class AdminServlet extends HttpServlet {
                     getDashboard(request, response);
                     break;
 
+                case "/profile":
+                    getProfile(request, response);
+                    break;
+
                 // Recruiters funcs
                 case "/recruiters":
                     getAllRecruiters(request, response);
@@ -74,6 +78,12 @@ public class AdminServlet extends HttpServlet {
     private void getDashboard(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(req, resp);
     }
+    // profile
+    private void getProfile(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+
+        req.getRequestDispatcher("/WEB-INF/views/profile/profile.jsp").forward(req, resp);
+    }
+
     // recruiters funcs
     private void getAllRecruiters(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<User> recruiters;
@@ -131,11 +141,11 @@ public class AdminServlet extends HttpServlet {
         List<Offer> offers;
         offers = offerDAO.getAllOffers();
         req.setAttribute("offers", offers);
-        req.getRequestDispatcher("/WEB-INF/views/admin/list_offers.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/offer/list_offers.jsp").forward(req, resp);
     }
     private void addOfferForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("redirect", "/admin/offers");
-        req.getRequestDispatcher("/WEB-INF/views/admin/offer.jsp").forward(req, resp);
+        req.getRequestDispatcher("/WEB-INF/views/offer/offer.jsp").forward(req, resp);
     }
     private void editOfferForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int id = Integer.parseInt(req.getParameter("id"));
@@ -143,7 +153,7 @@ public class AdminServlet extends HttpServlet {
             Offer offer = offerDAO.getOffer(id);
             req.setAttribute("offer", offer);
             req.setAttribute("redirect", "/admin/offers");
-            req.getRequestDispatcher("/WEB-INF/views/admin/offer.jsp").forward(req, resp);
+            req.getRequestDispatcher("/WEB-INF/views/offer/offer.jsp").forward(req, resp);
         }catch (Exception e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }

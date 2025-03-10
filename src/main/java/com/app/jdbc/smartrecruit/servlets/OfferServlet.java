@@ -3,6 +3,7 @@ package com.app.jdbc.smartrecruit.servlets;
 import com.app.jdbc.smartrecruit.daos.OfferDao;
 import com.app.jdbc.smartrecruit.daos.UserDAO;
 import com.app.jdbc.smartrecruit.models.Offer;
+import com.app.jdbc.smartrecruit.models.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -51,6 +52,8 @@ public class OfferServlet extends HttpServlet {
         String category = req.getParameter("category");
 
         Offer offer = new Offer();
+        HttpSession session = req.getSession(false);
+        User user = (User) session.getAttribute("user");
 
         offer.setTitle(title);
         offer.setDescription(description);
@@ -60,7 +63,7 @@ public class OfferServlet extends HttpServlet {
         offer.setUpdatedAt(LocalDateTime.now());
 
         try {
-            offer.setCreatedBy(userDao.getUserById(1));
+            offer.setCreatedBy(user);
             offerDao.addOffer(offer);
             resp.sendRedirect("/admin/offers");
         }catch (Exception e){

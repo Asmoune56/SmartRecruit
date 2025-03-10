@@ -17,10 +17,10 @@
 <%@ include file="../components/sidebar.jsp" %>
 <div class="ml-[300px] mr-[16px] my-[16px]">
     <h1 class="text-2xl font-bold text-gray-900 mb-6">
-        <c:if test="${offer == null}" >
+        <c:if test="${requestScope.offer == null}" >
             Add Offer
         </c:if>
-        <c:if test="${offer != null}" >
+        <c:if test="${requestScope.offer != null}" >
             Edit Offer
         </c:if>
     </h1>

@@ -78,5 +78,13 @@ public class UserDAO {
 
         }
     }
+
+    public int getUserCountByRole(Class<? extends User> role) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            return session.createQuery("select count(u) from User u where type(u) = :role", Integer.class)
+                    .setParameter("role", role)
+                    .uniqueResult();
+        }
+    }
 }
 
